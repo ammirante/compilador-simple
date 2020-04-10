@@ -27,6 +27,16 @@ public class GerenciadorDeArquivo {
     }
 
     /**
+     * Método responsável por retornar o texto de acordo com a linha do arquivo
+     * 
+     * @param linha
+     * @return
+     */
+    public String getInstrucao(Integer linha) {
+        return sb.toString().split("\n")[linha - 1];
+    }
+
+    /**
      * Método responsável por retornar uma lista de inteiros contendo o número das
      * instruções.
      * 
