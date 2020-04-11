@@ -1,17 +1,26 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AnsaliseSintatica {
     private FormataToken formataToken;
-    private List<Erro> listaErros;
+    private List<Erro> listaErros = new ArrayList<>();
     private Map<Integer, Instrucoes> listaInstrucoes;
 
+    /**
+     * 
+     * @param pathArquivo
+     * @param tokens
+     */
     public AnsaliseSintatica(String pathArquivo, List<Token> tokens) {
         this.formataToken = new FormataToken(pathArquivo, tokens);
         this.listaInstrucoes = new HashMap(formataToken.getMapInstrucoes());
     }
 
+    /**
+     * 
+     */
     public void mostrarListaInstrucoes() {
         for (Integer i : listaInstrucoes.keySet()) {
             Instrucoes inst = listaInstrucoes.get(i);
@@ -26,12 +35,15 @@ public class AnsaliseSintatica {
         }
     }
 
+    /**
+     * 
+     */
     public void inicializarAnaliseSintatica() {
         for (Map.Entry<Integer, Instrucoes> map : listaInstrucoes.entrySet()) {
             try {
-                ValidarToken.validaInstrucoes(map.getValue());
+                ValidarToken.validaInstrucoes(Instrucoes.clone(map.getValue()));
             } catch (SintaxeException e) {
-                System.out.println(e.getMessage());
+                System.err.println("ERROR: " + e.getMessage());
                 listaErros.add(e.getErro());
             }
         }

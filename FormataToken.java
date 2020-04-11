@@ -8,6 +8,11 @@ public class FormataToken {
     List<Token> tokens;
     GerenciadorDeArquivo gerenciadorDeArquivo;
 
+    /**
+     * 
+     * @param pathArquivo
+     * @param tokens
+     */
     public FormataToken(String pathArquivo, List<Token> tokens) {
         this.pathArquivo = pathArquivo;
         this.tokens = tokens;

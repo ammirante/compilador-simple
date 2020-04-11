@@ -3,11 +3,23 @@ public class Erro {
     int coluna;
     int instrucao;
 
-    /** */
+    /**
+     * 
+     */
     public Erro() {
         this.linha = -1;
         this.coluna = -1;
         this.instrucao = -1;
+    }
+
+    /**
+     * 
+     * @param token
+     */
+    public Erro(Token token) {
+        this.linha = token.getLine();
+        this.coluna = token.getColumn();
+        this.instrucao = token.getType();
     }
 
     /**

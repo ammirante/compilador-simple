@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Instrucoes {
@@ -25,5 +26,15 @@ public class Instrucoes {
      */
     public List<Token> getTokens() {
         return this.tokens;
+    }
+
+    /**
+     * 
+     * @param instrucoes
+     * @return
+     * @throws CloneNotSupportedException
+     */
+    public static Instrucoes clone(Instrucoes instrucoes) {
+        return new Instrucoes(instrucoes.conteudoLinha, new ArrayList<Token>(instrucoes.tokens));
     }
 }

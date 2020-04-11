@@ -1,5 +1,6 @@
 10 rem determina e imprime a soma de dois inteiros
 15 rem
+17 if a == 1 goto 30
 20 rem lê os dois inteiros
 30 input a
 40 input b 
@@ -8,7 +9,8 @@
 60 let c = a + b
 65 rem
 70 rem imprime o resultado
-80 print c
+80 print d
+85 if a == b goto 30
 90 rem termina a execução do programa
-30 input -
+30 input v
 99 end
