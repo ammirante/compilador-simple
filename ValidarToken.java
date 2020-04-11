@@ -10,28 +10,41 @@ public class ValidarToken {
     public static void validaInstrucoes(Instrucoes instrucoes) throws SintaxeException {
         // Caso o primeiro token seja INTEGER já remove da lista e válida só os próximos
         // tokens.
-        Token instrucaoInicial = instrucoes.getTokens().get(0);
+        Token instrucaoInicial = removeTokenTopo(instrucoes.getTokens());
         if (instrucaoInicial.getType() != Simbolo.INTEGER) {
             throw new SintaxeException("A instrução não se inicia com um inteiro.", new Erro(instrucaoInicial));
         }
 
         for (int i = 0; i < instrucoes.getTokens().size(); i++) {
-            switch (instrucoes.getTokens().remove(0).getType()) {
+            Token tokenAtual = removeTokenTopo(instrucoes.getTokens());
+            switch (tokenAtual.getType()) {
+                case Simbolo.LET:
+                    validaOperacao(instrucoes.getTokens());
+                    break;
                 case Simbolo.IF:
                     validaCondicional(instrucoes.getTokens());
                     break;
                 case Simbolo.GOTO:
                     validaGoto(instrucoes.getTokens());
                     break;
-                /*case Simbolo.END:
+                case Simbolo.END:
+                    break;
                 case Simbolo.LF:
+                    validaLF(instrucoes.getTokens());
                 case Simbolo.REM:
-                    validaLFREMEnd(instrucoes.getTokens());
-                    break;*/
+                    validaREM(instrucoes.getTokens());
+                    break;
                 case Simbolo.INPUT:
                 case Simbolo.PRINT:
                     validaInputPrint(instrucoes.getTokens());
                     break;
+                case Simbolo.ETX:
+                    break;
+                default:
+                    StringBuilder erro = new StringBuilder();
+                    erro.append("Era esperado um token de operação ");
+                    erro.append("Erro no método: validaInstrucoes");
+                    throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
             }
         }
     }
@@ -42,12 +55,17 @@ public class ValidarToken {
      * @throws SintaxeException
      */
     private static void validaInputPrint(List<Token> tokens) throws SintaxeException {
-        Token token = tokens.remove(0);
+        Token token = removeTokenTopo(tokens);
         if (!validaVariavel(token)) {
-            throw new SintaxeException(
-                    "Era esperado o token: " + Simbolo.VARIABLE + " mas o token informado era: " + token.getType(),
-                    new Erro(token));
+            StringBuilder erro = new StringBuilder();
+            erro.append("Era esperado o token: ");
+            erro.append(Simbolo.VARIABLE);
+            erro.append(" mas o token informado foi: ");
+            erro.append(token.getType());
+            erro.append("Erro no método: validaInputPrint ");
+            throw new SintaxeException(erro.toString(), new Erro(token));
         }
+        validaLF(tokens);
     }
 
     /**
@@ -67,12 +85,35 @@ public class ValidarToken {
      * @param tokens
      * @throws SintaxeException
      */
-    private static void validaLFREMEnd(List<Token> tokens) throws SintaxeException {
-        if (!tokens.isEmpty()) {
-            throw new SintaxeException(
-                    "Não era esperado nenhum token a mais, mas ainda contem: " + tokens.size() + " tokens",
-                    new Erro(tokens.get(0)));
+    private static void validaLF(List<Token> tokens) throws SintaxeException {
+        Token tokenAtual = removeTokenTopo(tokens);
+        if (tokenAtual.getType() != Simbolo.LF) {
+            StringBuilder erro = new StringBuilder();
+            erro.append("Era esperado o token: ");
+            erro.append(Simbolo.LF);
+            erro.append(" mas o token informado foi: ");
+            erro.append(tokenAtual.getType());
+            erro.append("Erro no método: validaLF");
+            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
         }
+
+        if (!tokens.isEmpty()) {
+            StringBuilder erro = new StringBuilder();
+            erro.append("Não era esperado nenhum token a mais, mas ainda contem: ");
+            erro.append(tokens.size());
+            erro.append(" tokens");
+            erro.append("Erro no método: validaLF");
+            throw new SintaxeException(erro.toString(), new Erro(tokens.get(0)));
+        }
+    }
+
+    /**
+     * 
+     * @param tokens
+     * @throws SintaxeException
+     */
+    private static void validaREM(List<Token> tokens) throws SintaxeException {
+        validaLF(tokens);
     }
 
     /**
@@ -81,12 +122,17 @@ public class ValidarToken {
      * @throws SintaxeException
      */
     private static void validaGoto(List<Token> tokens) throws SintaxeException {
-        Token token = tokens.remove(0);
-        if (token.getType() != Simbolo.INTEGER) {
-            throw new SintaxeException(
-                    "Era esperado o token: " + Simbolo.INTEGER + " mas o token informado era: " + token.getType(),
-                    new Erro(token));
+        Token token = removeTokenTopo(tokens);
+        if (!validaInteiro(token)) {
+            StringBuilder erro = new StringBuilder();
+            erro.append("Era esperado o token: ");
+            erro.append(Simbolo.INTEGER);
+            erro.append(" mas o token informado foi: ");
+            erro.append(token.getType());
+            erro.append(" Erro no método: validaGoto");
+            throw new SintaxeException(erro.toString(), new Erro(token));
         }
+        validaLF(tokens);
     }
 
     /**
@@ -95,22 +141,35 @@ public class ValidarToken {
      * @throws SintaxeException
      */
     private static void validaCondicional(List<Token> tokens) throws SintaxeException {
-        Token tokenAtual;
-        tokenAtual = tokens.remove(0);
+        Token tokenAtual = removeTokenTopo(tokens);
         if (!validaItem(tokenAtual)) {
-            throw new SintaxeException("Era esperado o token: " + Simbolo.VARIABLE + " ou " + Simbolo.INTEGER
-                    + " mas o token informado era: " + tokenAtual.getType(), new Erro(tokenAtual));
+            StringBuilder erro = new StringBuilder();
+            erro.append("Era esperado o token: ");
+            erro.append(Simbolo.VARIABLE);
+            erro.append(" mas o token informado foi: ");
+            erro.append(tokenAtual.getType());
+            erro.append(" Erro no método: validaCondicional");
+            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
         }
-        tokenAtual = tokens.remove(0);
+        tokenAtual = removeTokenTopo(tokens);
         if (!validaRelacional(tokenAtual)) {
-            throw new SintaxeException(
-                    "Era esperado token relacional mas o token informado foi: " + tokenAtual.getType(),
-                    new Erro(tokenAtual));
+            StringBuilder erro = new StringBuilder();
+            erro.append("Era esperado o token relacional mas o token informado foi: ");
+            erro.append(tokenAtual.getType());
+            erro.append(" Erro no método: validaCondicional");
+            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
         }
-        tokenAtual = tokens.remove(0);
+        tokenAtual = removeTokenTopo(tokens);
         if (!validaItem(tokenAtual)) {
-            throw new SintaxeException("Era esperado o token: " + Simbolo.VARIABLE + " ou " + Simbolo.INTEGER
-                    + " mas o token informado era: " + tokenAtual.getType(), new Erro(tokenAtual));
+            StringBuilder erro = new StringBuilder();
+            erro.append("Era esperado o token: ");
+            erro.append(Simbolo.VARIABLE);
+            erro.append(" ou ");
+            erro.append(Simbolo.INTEGER);
+            erro.append(" mas o token informado foi: ");
+            erro.append(tokenAtual.getType());
+            erro.append(" Erro no método: validaCondicional");
+            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
         }
     }
 
@@ -139,11 +198,117 @@ public class ValidarToken {
      * @return
      */
     private static Boolean validaItem(Token token) {
-        if (token.getType() == Simbolo.INTEGER || token.getType() == Simbolo.VARIABLE) {
+        if (validaInteiro(token) || validaVariavel(token)) {
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
         }
     }
 
+    private static void validaOperacao(List<Token> tokens) throws SintaxeException {
+        Token tokenAtual = removeTokenTopo(tokens);
+        if (!validaVariavel(tokenAtual)) {
+            StringBuilder erro = new StringBuilder();
+            erro.append("Era esperado o token: ");
+            erro.append(Simbolo.VARIABLE);
+            erro.append(" ou ");
+            erro.append(Simbolo.INTEGER);
+            erro.append(" mas o token informado foi: ");
+            erro.append(tokenAtual.getType());
+            erro.append(" Erro no método: validaCondicional");
+            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+        }
+        tokenAtual = removeTokenTopo(tokens);
+        if (!validaAtribuicao(tokenAtual)) {
+            StringBuilder erro = new StringBuilder();
+            erro.append("Era esperado o token: ");
+            erro.append(Simbolo.ASSIGNMENT);
+            erro.append(" mas o token informado foi: ");
+            erro.append(tokenAtual.getType());
+            erro.append(" Erro no método: validaCondicional");
+            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+        }
+        if (!validaExpressao(tokens)) {
+            StringBuilder erro = new StringBuilder();
+            erro.append("Era esperado o token: ");
+            erro.append(Simbolo.VARIABLE);
+            erro.append(" ou ");
+            erro.append(Simbolo.INTEGER);
+            erro.append(" mas o token informado foi: ");
+            erro.append(tokenAtual.getType());
+            erro.append(" Erro no método: validaCondicional");
+            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+        }
+        validaLF(tokens);
+    }
+
+    /**
+     * 
+     * @param tokens
+     * @return
+     */
+    private static Token removeTokenTopo(List<Token> tokens) {
+        try {
+            return tokens.remove(0);
+        } catch (IndexOutOfBoundsException e) {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    /**
+     * 
+     * @param token
+     * @return
+     */
+    private static Boolean validaInteiro(Token token) {
+        if (token.getType() == Simbolo.INTEGER) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    /**
+     * 
+     * @param token
+     * @return
+     */
+    private static Boolean validaAtribuicao(Token token) {
+        if (token.getType() == Simbolo.ASSIGNMENT) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    /**
+     * 
+     * @param tokens
+     */
+    private static Boolean validaExpressao(List<Token> tokens) {
+        if (validaItem(removeTokenTopo(tokens))) {
+            if (tokens.isEmpty()) {
+                return Boolean.TRUE;
+            } else if (validaOperador(removeTokenTopo(tokens)) && validaItem(removeTokenTopo(tokens))) {
+                return Boolean.TRUE;
+            }
+        }
+
+        return Boolean.FALSE;
+    }
+
+    /**
+     * 
+     * @param token
+     * @return
+     */
+    private static Boolean validaOperador(Token token) {
+        switch (token.getType()) {
+            case Simbolo.DIVIDE:
+            case Simbolo.MULTIPLY:
+            case Simbolo.SUBTRACT:
+            case Simbolo.ADD:
+                return Boolean.TRUE;
+            default:
+                return Boolean.FALSE;
+        }
+    }
 }

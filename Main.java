@@ -28,18 +28,25 @@ public class Main {
             }
         }
         tempoFinal = System.currentTimeMillis();
-        System.out.println("Fim da análise léxica e o tempo para realizar a análise foi de: "
-                + (tempoFinal - tempoInicial) + " em milisegundos");
+        // System.out.println("Fim da análise léxica e o tempo para realizar a análise foi de: "
+                // + (tempoFinal - tempoInicial) + " em milisegundos");
 
-        System.out.println("Início da análise sintática");
+        // System.out.println("Início da análise sintática");
         tempoInicial = System.currentTimeMillis();
         AnsaliseSintatica analisadorSintatico = new AnsaliseSintatica(simpleCodePath, lexical.getTokens());
         analisadorSintatico.inicializarAnaliseSintatica();
         tempoFinal = System.currentTimeMillis();
-        System.out.println("Fim da análise sintática e o tempo para realizar a análise foi de: "
-                + (tempoFinal - tempoInicial) + " em milisegundos");
+        // System.out.println("Fim da análise sintática e o tempo para realizar a análise foi de: "
+                // + (tempoFinal - tempoInicial) + " em milisegundos");
+
+        // System.out.println("Início da análise semântica");
+        tempoInicial = System.currentTimeMillis();
         AnaliseSemantica analisadorSemantico = new AnaliseSemantica();
-    }
+        System.out.println(analisadorSemantico.analiseSemantica(simpleCodePath));
+        tempoFinal = System.currentTimeMillis();
+       // System.out.println("Fim da análise sintática e o tempo para realizar a análise foi de: "
+                // + (tempoFinal - tempoInicial) + " em milisegundos");
+    }//
 }
 // Ler todas as linhas, dar um split no " ", remover o primeiro índice de cada
 // linha, inserir em uma lista e verificar se estão na ordem crescente.
