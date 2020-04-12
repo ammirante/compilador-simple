@@ -9,9 +9,9 @@
 60 let c = a + b
 65 rem
 70 rem imprime o resultado
-80 print 1
-85 if a == b goto if
+80 print c
+85 if a == b goto 2
 90 rem termina a execução do programa
-95 input v
+95 input 2
 96 let c = a + b
 99 end

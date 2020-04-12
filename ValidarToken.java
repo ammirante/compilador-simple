@@ -1,5 +1,10 @@
 import java.util.List;
 
+/**
+ * Classe responsável pela validação do token.
+ * 
+ * Desenvolvido por: Douglas Ammirante da Cunha (douglas.ammirante@automatizai.com.br) e Gabriel Bueno Yassunaga (gabriel.yassunaga@automatizai.com.br) 
+ */
 public class ValidarToken {
 
     /**
@@ -57,13 +62,7 @@ public class ValidarToken {
     private static void validaInputPrint(List<Token> tokens) throws SintaxeException {
         Token token = removeTokenTopo(tokens);
         if (!validaVariavel(token)) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Era esperado o token: ");
-            erro.append(Simbolo.VARIABLE);
-            erro.append(" mas o token informado foi: ");
-            erro.append(token.getType());
-            erro.append("Erro no método: validaInputPrint ");
-            throw new SintaxeException(erro.toString(), new Erro(token));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(token));
         }
         validaLF(tokens);
     }
@@ -88,22 +87,11 @@ public class ValidarToken {
     private static void validaLF(List<Token> tokens) throws SintaxeException {
         Token tokenAtual = removeTokenTopo(tokens);
         if (tokenAtual.getType() != Simbolo.LF) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Era esperado o token: ");
-            erro.append(Simbolo.LF);
-            erro.append(" mas o token informado foi: ");
-            erro.append(tokenAtual.getType());
-            erro.append("Erro no método: validaLF");
-            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(tokenAtual));
         }
 
         if (!tokens.isEmpty()) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Não era esperado nenhum token a mais, mas ainda contem: ");
-            erro.append(tokens.size());
-            erro.append(" tokens");
-            erro.append("Erro no método: validaLF");
-            throw new SintaxeException(erro.toString(), new Erro(tokens.get(0)));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(tokens.get(0)));
         }
     }
 
@@ -124,13 +112,7 @@ public class ValidarToken {
     private static void validaGoto(List<Token> tokens) throws SintaxeException {
         Token token = removeTokenTopo(tokens);
         if (!validaInteiro(token)) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Era esperado o token: ");
-            erro.append(Simbolo.INTEGER);
-            erro.append(" mas o token informado foi: ");
-            erro.append(token.getType());
-            erro.append(" Erro no método: validaGoto");
-            throw new SintaxeException(erro.toString(), new Erro(token));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(token));
         }
         validaLF(tokens);
     }
@@ -143,33 +125,15 @@ public class ValidarToken {
     private static void validaCondicional(List<Token> tokens) throws SintaxeException {
         Token tokenAtual = removeTokenTopo(tokens);
         if (!validaItem(tokenAtual)) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Era esperado o token: ");
-            erro.append(Simbolo.VARIABLE);
-            erro.append(" mas o token informado foi: ");
-            erro.append(tokenAtual.getType());
-            erro.append(" Erro no método: validaCondicional");
-            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(tokenAtual));
         }
         tokenAtual = removeTokenTopo(tokens);
         if (!validaRelacional(tokenAtual)) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Era esperado o token relacional mas o token informado foi: ");
-            erro.append(tokenAtual.getType());
-            erro.append(" Erro no método: validaCondicional");
-            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(tokenAtual));
         }
         tokenAtual = removeTokenTopo(tokens);
         if (!validaItem(tokenAtual)) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Era esperado o token: ");
-            erro.append(Simbolo.VARIABLE);
-            erro.append(" ou ");
-            erro.append(Simbolo.INTEGER);
-            erro.append(" mas o token informado foi: ");
-            erro.append(tokenAtual.getType());
-            erro.append(" Erro no método: validaCondicional");
-            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(tokenAtual));
         }
     }
 
@@ -208,36 +172,14 @@ public class ValidarToken {
     private static void validaOperacao(List<Token> tokens) throws SintaxeException {
         Token tokenAtual = removeTokenTopo(tokens);
         if (!validaVariavel(tokenAtual)) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Era esperado o token: ");
-            erro.append(Simbolo.VARIABLE);
-            erro.append(" ou ");
-            erro.append(Simbolo.INTEGER);
-            erro.append(" mas o token informado foi: ");
-            erro.append(tokenAtual.getType());
-            erro.append(" Erro no método: validaCondicional");
-            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(tokenAtual));
         }
         tokenAtual = removeTokenTopo(tokens);
         if (!validaAtribuicao(tokenAtual)) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Era esperado o token: ");
-            erro.append(Simbolo.ASSIGNMENT);
-            erro.append(" mas o token informado foi: ");
-            erro.append(tokenAtual.getType());
-            erro.append(" Erro no método: validaCondicional");
-            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(tokenAtual));
         }
         if (!validaExpressao(tokens)) {
-            StringBuilder erro = new StringBuilder();
-            erro.append("Era esperado o token: ");
-            erro.append(Simbolo.VARIABLE);
-            erro.append(" ou ");
-            erro.append(Simbolo.INTEGER);
-            erro.append(" mas o token informado foi: ");
-            erro.append(tokenAtual.getType());
-            erro.append(" Erro no método: validaCondicional");
-            throw new SintaxeException(erro.toString(), new Erro(tokenAtual));
+            throw new SintaxeException("Erro no método: " + Thread.currentThread().getStackTrace()[1].getMethodName(), new Erro(tokenAtual));
         }
         validaLF(tokens);
     }

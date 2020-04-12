@@ -1,7 +1,12 @@
+/**
+ * Classe responsável por armazenar os atributos dos tokens 
+ * 
+ * Desenvolvido por: Douglas Ammirante da Cunha (douglas.ammirante@automatizai.com.br) e Gabriel Bueno Yassunaga (gabriel.yassunaga@automatizai.com.br) 
+ */
 public class Erro {
-    int linha;
-    int coluna;
-    int instrucao;
+    Integer linha;
+    Integer coluna;
+    Integer instrucao;
 
     /**
      * 
@@ -26,7 +31,7 @@ public class Erro {
      * 
      * @return
      */
-    public int getLinha() {
+    public Integer getLinha() {
         return linha;
     }
 
@@ -34,7 +39,7 @@ public class Erro {
      * 
      * @param linha
      */
-    public void setLinha(int linha) {
+    public void setLinha(Integer linha) {
         this.linha = linha;
     }
 
@@ -42,7 +47,7 @@ public class Erro {
      * 
      * @return
      */
-    public int getColuna() {
+    public Integer getColuna() {
         return this.coluna;
     }
 
@@ -50,7 +55,7 @@ public class Erro {
      * 
      * @param coluna
      */
-    public void setColuna(int coluna) {
+    public void setColuna(Integer coluna) {
         this.coluna = coluna;
     }
 
@@ -58,7 +63,7 @@ public class Erro {
      * 
      * @return
      */
-    public int getInstrucao() {
+    public Integer getInstrucao() {
         return this.instrucao;
     }
 
@@ -66,7 +71,7 @@ public class Erro {
      * 
      * @param instrucao
      */
-    public void setInstrucao(int instrucao) {
+    public void setInstrucao(Integer instrucao) {
         this.instrucao = instrucao;
     }
 }

@@ -1,3 +1,8 @@
+/**
+ * Exception criada para tratar erros na Sintaxe.
+ * 
+ * Desenvolvido por: Douglas Ammirante da Cunha (douglas.ammirante@automatizai.com.br) e Gabriel Bueno Yassunaga (gabriel.yassunaga@automatizai.com.br) 
+ */
 public class SintaxeException extends Exception {
 
     /**

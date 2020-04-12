@@ -5,14 +5,26 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe responsável por fazer toda a gestão do arquivo.
+ * 
+ * Desenvolvido por: Douglas Ammirante da Cunha (douglas.ammirante@automatizai.com.br) e Gabriel Bueno Yassunaga (gabriel.yassunaga@automatizai.com.br) 
+ */
 public class GerenciadorDeArquivo {
     StringBuilder sb = new StringBuilder();
     String pathArquivo;
 
+    /**
+     * 
+     * @param pathArquivo
+     */
     public GerenciadorDeArquivo(String pathArquivo) {
         this.pathArquivo = pathArquivo;
     }
 
+    /**
+     * Método responsável por abrir o arquivo.
+     */
     public void abrirArquivo() {
         try {
             BufferedReader br = Files.newBufferedReader(Paths.get(pathArquivo));

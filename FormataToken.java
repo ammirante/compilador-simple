@@ -2,6 +2,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Classe responsável por formatar o token.
+ * 
+ * Desenvolvido por: Douglas Ammirante da Cunha (douglas.ammirante@automatizai.com.br) e Gabriel Bueno Yassunaga (gabriel.yassunaga@automatizai.com.br) 
+ */
 public class FormataToken {
     Map<Integer, Instrucoes> mapInstrucoes = new HashMap<>();
     String pathArquivo;

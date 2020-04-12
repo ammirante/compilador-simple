@@ -2,12 +2,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 
+/**
+ * Classe responsável pela execução do compilador.
+ * 
+ * Desenvolvido por: Douglas Ammirante da Cunha
+ * (douglas.ammirante@automatizai.com.br) e Gabriel Bueno Yassunaga
+ * (gabriel.yassunaga@automatizai.com.br)
+ */
 public class Main {
     private static String simpleCodePath = "D:\\Faculdade Douglas\\compiladores\\programa_simple.txt";
 
     public static void main(String[] args) {
-        long tempoInicial, tempoFinal;
-        System.out.println("Início da análise léxica");
         BufferedReader source = null;
 
         try {
@@ -16,7 +21,7 @@ public class Main {
             exception.printStackTrace();
         }
 
-        tempoInicial = System.currentTimeMillis();
+        System.out.println("Início da análise léxica");
         AnaliseLexica lexical = new AnaliseLexica();
         if (!lexical.parser(source)) {
             for (String key : lexical.getSimboloTable().keySet()) {
@@ -27,26 +32,18 @@ public class Main {
                 System.out.println(token);
             }
         }
-        tempoFinal = System.currentTimeMillis();
-        // System.out.println("Fim da análise léxica e o tempo para realizar a análise foi de: "
-                // + (tempoFinal - tempoInicial) + " em milisegundos");
+        System.out.println("Fim da análise léxica");
 
-        // System.out.println("Início da análise sintática");
-        tempoInicial = System.currentTimeMillis();
+        System.out.println("Início da análise sintática.");
         AnsaliseSintatica analisadorSintatico = new AnsaliseSintatica(simpleCodePath, lexical.getTokens());
         analisadorSintatico.inicializarAnaliseSintatica();
-        tempoFinal = System.currentTimeMillis();
-        // System.out.println("Fim da análise sintática e o tempo para realizar a análise foi de: "
-                // + (tempoFinal - tempoInicial) + " em milisegundos");
+        System.out.println("Fim da análise sintática.");
 
-        // System.out.println("Início da análise semântica");
-        tempoInicial = System.currentTimeMillis();
+        System.out.println("Início da análise semântica.");
         AnaliseSemantica analisadorSemantico = new AnaliseSemantica();
-        System.out.println(analisadorSemantico.analiseSemantica(simpleCodePath));
-        tempoFinal = System.currentTimeMillis();
-       // System.out.println("Fim da análise sintática e o tempo para realizar a análise foi de: "
-                // + (tempoFinal - tempoInicial) + " em milisegundos");
-    }//
+        if (!analisadorSemantico.analiseSemantica(simpleCodePath)) {
+            System.out.println("Erro na análise semântica, as instruções devem estar em ordem crescente");
+        }
+        System.out.println("Fim da análise semântica.");
+    }
 }
-// Ler todas as linhas, dar um split no " ", remover o primeiro índice de cada
-// linha, inserir em uma lista e verificar se estão na ordem crescente.
